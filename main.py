@@ -1,14 +1,11 @@
 from tkinter import *
 from tkinter.ttk import *
-from pynput import mouse
-from pynput.mouse import Button as mButton
 from pynput import keyboard
 import time
-import queue
-import threading
+import json
+import MouseController
 
-autoclicking = False
-queue = queue.SimpleQueue()
+settings = {}
 
 
 def autoclick():
@@ -20,41 +17,25 @@ def record():
 
 
 def playback():
-    if not mouse_inputs:
-        print("pop-up -> no recording!")
-    else:
-        print("playing now")
-
-
-def f6_pressed(event):
-    print("insert repeated clicking here")
+    print("playing now")
 
 
 def on_press(key):
-    global autoclicking
-    print("key was pressed!")
-    if key == keyboard.Key.f6:
-        autoclicking = not autoclicking
-        print(autoclicking)
-        if autoclicking:
-            event.set()
+    if str(key) == settings["button"]:
+        mouse.clicking = not mouse.clicking
+        print(mouse.clicking)
+        if mouse.clicking:
+            mouse.event.set()
 
 
-# def on_release(key):
-#     print("kms")
-
-
-def infinite_click():
-    while True:
-        event.wait()
-        while autoclicking:
-            time.sleep(0.001)
-            m.click(mButton.left)
-            print(m.position)
-        event.clear()
+def load_settings():
+    global settings
+    with open('settings.json', 'r') as infile:
+        settings = json.load(infile)
 
 
 if __name__ == '__main__':
+    load_settings()
     root = Tk()
     root.title("Terrible Autoclicker")
     root.geometry("400x400")
@@ -68,22 +49,15 @@ if __name__ == '__main__':
     frame = Frame(root)
     frame.grid()
     Button(frame, text="Autoclick", command=autoclick).grid(column=0, row=0)
-    Button(frame, text="Record", command=record).grid(column=1, row=0)
-    Button(frame, text="Playback", command=playback).grid(column=2, row=0)
+    Button(frame, text="Record", command=record).grid(column=0, row=1)
+    Button(frame, text="Playback", command=playback).grid(column=0, row=2)
 
-    mouse_inputs = []
-    # m = mouse.Controller()
-    # mouse = MouseControl.MouseControl()
-    # mouse.set_position(500, 500)
-
-    m = mouse.Controller()
-    # m.position = (500, 500)
-
-    clicking_thread = threading.Thread(target=infinite_click, daemon=True)
-    event = threading.Event()
-    clicking_thread.start()
+    mouse = MouseController.MouseController(settings["delay"])
+    mouse.set_position(5.5, 6.2)
 
     keyboard_listener = keyboard.Listener(
         on_press)
     keyboard_listener.start()
     root.mainloop()
+    with open('settings.json', 'w') as outfile:
+        json.dump(settings, outfile, indent=4, sort_keys=True)
