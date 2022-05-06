@@ -1,13 +1,14 @@
+import time
+import threading
+
 from pynput import mouse
 from pynput.mouse import Button
-import threading
-import time
 
 
 class MouseController:
     """A class used to control the mouse and enable automated clicking.
 
-    :param mouse.Controller mouse_controller:
+    :param mouse.Controller mouse_controller: TODO
     :param bool clicking: a boolean dictating whether clicking should be
         on or not
     :param delay: the number of seconds between each click
@@ -29,6 +30,7 @@ class MouseController:
         self.clicking_thread = threading.Thread(target=self.infinite_click,
                                                 daemon=True)
         self.event = threading.Event()
+
         self.clicking_thread.start()
 
     def set_position(self, x, y):

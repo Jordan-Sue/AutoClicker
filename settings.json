@@ -1,4 +1,4 @@
 {
-    "button": "Key.f6",
-    "delay": 0.001
+    "delay": 0.001,
+    "key": "Key.f6"
 }

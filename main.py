@@ -1,9 +1,10 @@
+import json
+
 from tkinter import *
 from tkinter.ttk import *
-from pynput import keyboard
-import time
-import json
+
 import MouseController
+import KeyboardController
 
 settings = {}
 
@@ -18,14 +19,6 @@ def record():
 
 def playback():
     print("playing now")
-
-
-def on_press(key):
-    if str(key) == settings["button"]:
-        mouse.clicking = not mouse.clicking
-        print(mouse.clicking)
-        if mouse.clicking:
-            mouse.event.set()
 
 
 def load_settings():
@@ -53,11 +46,8 @@ if __name__ == '__main__':
     Button(frame, text="Playback", command=playback).grid(column=0, row=2)
 
     mouse = MouseController.MouseController(settings["delay"])
-    mouse.set_position(5.5, 6.2)
+    keyboard = KeyboardController.KeyboardController(mouse, settings["key"])
 
-    keyboard_listener = keyboard.Listener(
-        on_press)
-    keyboard_listener.start()
     root.mainloop()
     with open('settings.json', 'w') as outfile:
         json.dump(settings, outfile, indent=4, sort_keys=True)
