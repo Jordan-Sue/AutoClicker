@@ -4,8 +4,10 @@ from pynput import keyboard
 class KeyboardController:
     """A class used to handle keyboard inputs.
 
-    :param keyboard.Listener keyboard_listener: TODO
-    :param mouse.Controller mouse: TODO
+    :param object keyboard_listener: a listener object that calls a
+        given function when a key on the keyboard is pressed
+    :param object mouse: a mouse controller object to enable
+        mouse manipulation via the pynput mouse library
     :param str correct_key_string: the correct key to signal the mouse
         event
     """
@@ -13,7 +15,8 @@ class KeyboardController:
     def __init__(self, mouse_controller, correct_key):
         """Constructor method.
 
-        :param mouse.Controller mouse_controller: TODO
+        :param object mouse_controller: a mouse controller object to enable
+            mouse manipulation via the pynput mouse library
         :param string correct_key: the correct key to signal the mouse
             event
         """
@@ -27,7 +30,7 @@ class KeyboardController:
     def on_press(self, key):
         """If the correct key is pressed, signal the mouse event.
 
-        :param key: the key pressed
+        :param object key: the key object pressed
         """
 
         # print(key)

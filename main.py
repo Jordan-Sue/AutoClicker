@@ -1,12 +1,9 @@
-import json
-
 from tkinter import *
 from tkinter.ttk import *
 
 import MouseController
 import KeyboardController
-
-settings = {}
+import json_read_write
 
 
 def autoclick():
@@ -21,14 +18,7 @@ def playback():
     print("playing now")
 
 
-def load_settings():
-    global settings
-    with open('settings.json', 'r') as infile:
-        settings = json.load(infile)
-
-
 if __name__ == '__main__':
-    load_settings()
     root = Tk()
     root.title("Terrible Autoclicker")
     root.geometry("400x400")
@@ -45,9 +35,10 @@ if __name__ == '__main__':
     Button(frame, text="Record", command=record).grid(column=0, row=1)
     Button(frame, text="Playback", command=playback).grid(column=0, row=2)
 
+    settings = json_read_write.load_settings()
     mouse = MouseController.MouseController(settings["delay"])
     keyboard = KeyboardController.KeyboardController(mouse, settings["key"])
 
     root.mainloop()
-    with open('settings.json', 'w') as outfile:
-        json.dump(settings, outfile, indent=4, sort_keys=True)
+
+    json_read_write.save_settings(settings)
