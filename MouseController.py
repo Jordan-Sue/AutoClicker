@@ -10,8 +10,6 @@ class MouseController:
 
     :param object mouse_controller: a mouse controller object
         to enable mouse manipulation via the pynput library
-    :param bool clicking: a boolean dictating whether clicking should be
-        on or not
     :param delay: the number of seconds between each click
     :type delay: int or float
     :param threading.Thread clicking_thread: the thread the infinite
@@ -28,7 +26,6 @@ class MouseController:
         """
 
         self.mouse_controller = mouse.Controller()
-        self.clicking = False
         self.delay = delay
         self.clicking_thread = threading.Thread(target=self.infinite_click,
                                                 daemon=True)
@@ -50,18 +47,15 @@ class MouseController:
     def infinite_click(self):
         """Click the mouse with a given delay between each click.
 
-        This function runs infinitely waiting for a signal each
-        iteration, and when the signal is received clicking will
-        commence only if the boolean 'clicking' is set to true.
+        This function runs infinitely waiting on a thread event to
+        either begin or halt clicking.
         """
 
         while True:
             self.event.wait()
-            while self.clicking:
-                time.sleep(self.delay)
-                self.mouse_controller.click(Button.left)
-                # print(self.m.position)
-            self.event.clear()
+            self.mouse_controller.click(Button.left)
+            # print(self.mouse_controller.position)
+            time.sleep(self.delay)
 
     def set_delay(self, new_delay):
         """Set the delay to the new given delay.
