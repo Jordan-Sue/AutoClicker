@@ -43,5 +43,3 @@ class KeyboardController:
                 else:
                     self.mouse.event.set()
                     # print("off")
-        else:
-            print("true")

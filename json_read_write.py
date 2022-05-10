@@ -2,7 +2,7 @@ import json
 
 
 def load_settings():
-    """Loads the data from the 'settings.json' file.
+    """Loads the data from the "settings.json" file.
 
     :return: a dictionary containing the data from the file
     :rtype: dict
@@ -12,7 +12,7 @@ def load_settings():
 
 
 def save_settings(settings):
-    """Saves the given dictionary to the 'settings.json' file.
+    """Saves the given dictionary to the "settings.json" file.
 
     :param dict settings: the settings intended to be saved
     """

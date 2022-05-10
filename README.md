@@ -6,16 +6,21 @@ pynput and tkinter libraries.
 
 ## Features
 ### Current:
-- None
+- Repeated clicking with a set persistent delay by pressing the key f6
+- Toggle between a set position or the current location of the mouse
 
 ### Upcoming:
-- Click the mouse at the current cursor position at a desired rate
 - Record mouse movement and clicking with infinite playback
 - Read/write recorded mouse inputs
 
 ## Required Libraries
 - tkinter
 - pynput
+
+## Notes
+- As the nature of timing things with computers is very hard to do 
+  accurately, the precision of the delay between clicks will likely be 
+  off by tens, or in extreme cases, hundreds of milliseconds.
 
 ## Special Thanks
 - OP Auto Clicker 3.0

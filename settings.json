@@ -5,5 +5,10 @@
         1,
         0
     ],
-    "key": "Key.f6"
+    "key": "Key.f6",
+    "position": [
+        -342,
+        243
+    ],
+    "select": 1
 }
