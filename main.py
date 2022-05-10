@@ -5,6 +5,8 @@ import MouseController
 import KeyboardController
 import json_read_write
 
+x = "this is a test commit"
+
 
 def on_close(window):
     keyboard.popup = False
