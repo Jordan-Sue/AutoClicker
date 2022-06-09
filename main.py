@@ -96,8 +96,12 @@ def calc_delay():
         return temp
 
 
-def change_position(x, y, z):
-    settings["select"] = position_select.get()
+def change_position_select(x, y, z):
+    settings["position_select"] = position_select.get()
+
+
+def change_repeat_select(x, y, z):
+    settings["repeat_select"] = repeat_select.get()
 
 
 def pick():
@@ -135,6 +139,24 @@ def change_y(x, y, z):
                 y_text.set("".join(filter(lambda a: a.isdigit(),
                                           y_text.get())))
             error_popup("Only digits are allowed in this field.")
+
+
+def change_repeat(x, y, z):
+    if repeat_text.get() == "":
+        settings["repeat"] = 0
+    elif not repeat_text.get().isdigit():
+        repeat_text.set("".join(filter(lambda a: a.isdigit(), repeat_text.get())))
+        error_popup("Only digits are allowed in this field.")
+    else:
+        settings["repeat"] = repeat_text.get()
+
+
+def change_button(x, y, z):
+    settings["button"] = buttons.index(mouse_button.get())
+
+
+def change_click(x, y, z):
+    settings["type"] = types.index(click_type.get())
 
 
 def on_click(x, y, button, pressed):
@@ -198,6 +220,7 @@ if __name__ == "__main__":
     # click interval
     click_frame = ttk.LabelFrame(root, border=5, text="Click Interval")
     click_frame.pack(fill="x", padx=5, pady=5)
+    # click_frame.grid(column=0, row=0, padx=5, sticky="ew")
 
     for i in range(8):
         click_frame.columnconfigure(i, weight=1)
@@ -205,50 +228,51 @@ if __name__ == "__main__":
     hour_text = StringVar()
     hour_text.set(settings["delay"][0])
     hour_input = ttk.Entry(click_frame, justify=RIGHT,
-                           textvariable=hour_text, width=7)
-    hour_input.grid(column=0, row=0)
-    ttk.Label(click_frame, text="hour(s)").grid(column=1, row=0)
+                           textvariable=hour_text, width=6)
+    hour_input.grid(column=0, row=0, sticky=E)
+    ttk.Label(click_frame, text="hour(s)").grid(column=1, row=0, sticky=W)
     hour_text.trace_add("write", change_hour)
 
     min_text = StringVar()
     min_text.set(settings["delay"][1])
     min_input = ttk.Entry(click_frame, justify=RIGHT,
-                          textvariable=min_text, width=7)
-    min_input.grid(column=2, row=0)
-    ttk.Label(click_frame, text="min(s)").grid(column=3, row=0)
+                          textvariable=min_text, width=6)
+    min_input.grid(column=2, row=0, sticky=E)
+    ttk.Label(click_frame, text="min(s)").grid(column=3, row=0, sticky=W)
     min_text.trace_add("write", change_min)
 
     sec_text = StringVar()
     sec_text.set(settings["delay"][2])
     sec_input = ttk.Entry(click_frame, justify=RIGHT,
-                          textvariable=sec_text, width=7)
-    sec_input.grid(column=4, row=0)
-    ttk.Label(click_frame, text="sec(s)").grid(column=5, row=0)
+                          textvariable=sec_text, width=6)
+    sec_input.grid(column=4, row=0, sticky=E)
+    ttk.Label(click_frame, text="sec(s)").grid(column=5, row=0, sticky=W)
     sec_text.trace_add("write", change_sec)
 
     ms_text = StringVar()
     ms_text.set(settings["delay"][3])
     ms_input = ttk.Entry(click_frame, justify=RIGHT,
-                         textvariable=ms_text, width=7)
-    ms_input.grid(column=6, row=0)
-    ttk.Label(click_frame, text="msec(s)").grid(column=7, row=0)
+                         textvariable=ms_text, width=6)
+    ms_input.grid(column=6, row=0, sticky=E)
+    ttk.Label(click_frame, text="msec(s)").grid(column=7, row=0, sticky=W)
     ms_text.trace_add("write", change_ms)
 
     # cursor position
     position_frame = ttk.LabelFrame(root, border=5, text="Cursor Position")
     position_frame.pack(fill="x", padx=5, pady=5)
+    # position_frame.grid(column=0, row=2, padx=5, pady=5, sticky="ew")
 
     position_frame.columnconfigure(0, weight=2)
     for i in range(1, 7):
         position_frame.columnconfigure(i, weight=1)
 
     position_select = IntVar()
-    position_select.set(settings["select"])
+    position_select.set(settings["position_select"])
     ttk.Radiobutton(position_frame, text="Current location",
                     value=0, variable=position_select).grid(column=0, row=0)
     ttk.Radiobutton(position_frame, value=1,
                     variable=position_select).grid(column=1, row=0, sticky=E)
-    position_select.trace_add("write", change_position)
+    position_select.trace_add("write", change_position_select)
 
     ttk.Button(position_frame, text="Pick location",
                command=pick).grid(column=2, row=0, sticky=W)
@@ -256,7 +280,7 @@ if __name__ == "__main__":
     x_text = StringVar()
     x_text.set(settings["position"][0])
     x_input = ttk.Entry(position_frame, justify=RIGHT,
-                        textvariable=x_text, width=5)
+                        textvariable=x_text, width=6)
     x_input.grid(column=3, row=0, sticky=E)
     ttk.Label(position_frame, text="X").grid(column=4, row=0, sticky=W)
     x_text.trace_add("write", change_x)
@@ -264,10 +288,51 @@ if __name__ == "__main__":
     y_text = StringVar()
     y_text.set(settings["position"][1])
     y_input = ttk.Entry(position_frame, justify=RIGHT,
-                        textvariable=y_text, width=5)
+                        textvariable=y_text, width=6)
     y_input.grid(column=5, row=0, sticky=E)
     ttk.Label(position_frame, text="Y").grid(column=6, row=0, sticky=W)
     y_text.trace_add("write", change_y)
+
+    # click options
+    type_frame = ttk.LabelFrame(root, border=5, text="Mouse Options")
+    type_frame.pack(anchor=NE, side="left", padx=5, pady=5)
+    # type_frame.grid(column=0, row=1, sticky="ew")
+
+    ttk.Label(type_frame, text="Mouse button:").grid(column=0, row=0, sticky=W)
+    mouse_button = StringVar()
+    buttons = ["Left", "Middle", "Right"]
+    ttk.OptionMenu(type_frame, mouse_button,
+                   buttons[settings["button"]], *buttons).grid(column=1, row=0, sticky=E)
+    mouse_button.trace_add("write", change_button)
+
+    ttk.Label(type_frame, text="Click type:").grid(column=0, row=1, sticky=W)
+    click_type = StringVar()
+    types = ["Single", "Double", "Hold"]
+    ttk.OptionMenu(type_frame, click_type,
+                   types[settings["type"]], *types).grid(column=1, row=1, sticky=E)
+    click_type.trace_add("write", change_click)
+
+    # click repeat
+    repeat_frame = ttk.LabelFrame(root, border=5, text="Click repeat")
+    repeat_frame.pack(anchor=NW, side="right", padx=5, pady=5)
+    # repeat_frame.grid(column=1, row=1, sticky="ew")
+
+    repeat_select = IntVar()
+    repeat_select.set(settings["repeat_select"])
+    ttk.Radiobutton(repeat_frame, text="Repeat",
+                    value=0, variable=repeat_select).grid(column=0, row=0,
+                                                          sticky=W)
+    repeat_select.trace_add("write", change_repeat_select)
+    repeat_text = StringVar()
+    repeat_text.set(settings["repeat"])
+    repeat_input = ttk.Entry(repeat_frame, justify=RIGHT,
+                             textvariable=repeat_text, width=6)
+    repeat_input.grid(column=1, row=0, sticky=W)
+    repeat_text.trace_add("write", change_repeat)
+    ttk.Label(repeat_frame, text="time(s)").grid(column=2, row=0, sticky=W)
+    ttk.Radiobutton(repeat_frame, text="Repeat until stopped",
+                    value=1, variable=repeat_select).grid(column=0, columnspan=2,
+                                                          row=1, sticky=W)
 
     root.mainloop()
 

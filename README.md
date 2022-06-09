@@ -8,6 +8,8 @@ pynput and tkinter libraries.
 ### Current:
 - Repeated clicking with a set persistent delay by pressing the key f6
 - Toggle between a set position or the current location of the mouse
+- Choose the type of mouse button being pressed: left, middle, or right
+- Choose between single clicks, double clicks, or holding the button
 
 ### Upcoming:
 - Record mouse movement and clicking with infinite playback

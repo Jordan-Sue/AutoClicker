@@ -22,6 +22,8 @@ class MouseController:
         of user inputs
     :param bool picking: represents whether the user is picking a
         position with the mouse
+    :param list buttons: holds a list of the three mouse button objects
+        in the order of left, middle, right
     """
 
     def __init__(self, delay, on_click, settings):
@@ -43,6 +45,7 @@ class MouseController:
         self.mouse_listener = mouse.Listener(on_click=on_click)
         self.settings = settings
         self.picking = False
+        self.buttons = [Button.left, Button.middle, Button.right]
 
         self.clicking_thread.start()
         self.mouse_listener.start()
@@ -56,9 +59,20 @@ class MouseController:
 
         while True:
             self.event.wait()
-            if self.settings["select"]:
+            if self.settings["position_select"]:
                 self.mouse_controller.position = (self.settings["position"][0],
                                                   self.settings["position"][1])
-            self.mouse_controller.click(Button.left)
+            match self.settings["type"]:
+                case 0:
+                    self.mouse_controller.click(
+                        self.buttons[self.settings["button"]])
+                case 1:
+                    self.mouse_controller.click(
+                        self.buttons[self.settings["button"]], 2)
+                case 2:
+                    self.mouse_controller.release(
+                        self.buttons[self.settings["button"]])
+                    self.mouse_controller.press(
+                        self.buttons[self.settings["button"]])
             # print(self.mouse_controller.position)
             time.sleep(self.delay)
