@@ -8,11 +8,11 @@
     ],
     "key": "Key.f6",
     "position": [
-        -1202,
-        622
+        0,
+        0
     ],
-    "position_select": 1,
-    "repeat": "0",
+    "position_select": 0,
+    "repeat": 1,
     "repeat_select": 1,
-    "type": 1
+    "type": 0
 }

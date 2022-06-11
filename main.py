@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import math
 
 import MouseController
 import KeyboardController
@@ -143,12 +144,14 @@ def change_y(x, y, z):
 
 def change_repeat(x, y, z):
     if repeat_text.get() == "":
-        settings["repeat"] = 0
+        settings["repeat"] = 1
     elif not repeat_text.get().isdigit():
         repeat_text.set("".join(filter(lambda a: a.isdigit(), repeat_text.get())))
         error_popup("Only digits are allowed in this field.")
     else:
-        settings["repeat"] = repeat_text.get()
+        if repeat_text.get() == "0":
+            repeat_text.set("1")
+        settings["repeat"] = int(repeat_text.get())
 
 
 def change_button(x, y, z):
@@ -260,7 +263,6 @@ if __name__ == "__main__":
     # cursor position
     position_frame = ttk.LabelFrame(root, border=5, text="Cursor Position")
     position_frame.pack(fill="x", padx=5, pady=5)
-    # position_frame.grid(column=0, row=2, padx=5, pady=5, sticky="ew")
 
     position_frame.columnconfigure(0, weight=2)
     for i in range(1, 7):
@@ -296,7 +298,6 @@ if __name__ == "__main__":
     # click options
     type_frame = ttk.LabelFrame(root, border=5, text="Mouse Options")
     type_frame.pack(anchor=NE, side="left", padx=5, pady=5)
-    # type_frame.grid(column=0, row=1, sticky="ew")
 
     ttk.Label(type_frame, text="Mouse button:").grid(column=0, row=0, sticky=W)
     mouse_button = StringVar()
@@ -315,7 +316,6 @@ if __name__ == "__main__":
     # click repeat
     repeat_frame = ttk.LabelFrame(root, border=5, text="Click repeat")
     repeat_frame.pack(anchor=NW, side="right", padx=5, pady=5)
-    # repeat_frame.grid(column=1, row=1, sticky="ew")
 
     repeat_select = IntVar()
     repeat_select.set(settings["repeat_select"])
@@ -330,6 +330,7 @@ if __name__ == "__main__":
     repeat_input.grid(column=1, row=0, sticky=W)
     repeat_text.trace_add("write", change_repeat)
     ttk.Label(repeat_frame, text="time(s)").grid(column=2, row=0, sticky=W)
+
     ttk.Radiobutton(repeat_frame, text="Repeat until stopped",
                     value=1, variable=repeat_select).grid(column=0, columnspan=2,
                                                           row=1, sticky=W)

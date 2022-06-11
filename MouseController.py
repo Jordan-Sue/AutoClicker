@@ -57,8 +57,13 @@ class MouseController:
         thread event to either begin or halt clicking.
         """
 
+        counter = 1
+
         while True:
             self.event.wait()
+            if (not self.settings["repeat_select"]) and counter >= self.settings["repeat"]:
+                self.event.clear()
+                counter = 0
             if self.settings["position_select"]:
                 self.mouse_controller.position = (self.settings["position"][0],
                                                   self.settings["position"][1])
@@ -75,4 +80,6 @@ class MouseController:
                     self.mouse_controller.press(
                         self.buttons[self.settings["button"]])
             # print(self.mouse_controller.position)
+            if not self.settings["repeat_select"]:
+                counter += 1
             time.sleep(self.delay)
